@@ -9,9 +9,15 @@ import {Task} from '../model/task';
     styleUrls:['card.component.css'] //an array, so that you could have more than one css file... 1 is probably sufficient
 })
 export class CardComponent {
+    private del:boolean=true;
     @Input() task: Task;
 
     statusToggle(){
         this.task.completed = !this.task.completed;  //ie setting it to the opposite of its current value
+    }
+
+    deleteTask(){
+        console.log("deleting card "+ this.task.content);      
+        this.del = false;
     }
 }//so this component can be used in other components
