@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
 
 import { WeatherService } from '../service/weather.service';
 
@@ -6,7 +7,7 @@ import { Weather } from '../model/weather';
 
 import { WEATHER_COLORS } from '../constants/constants';
 
-declare var Skycons: any; 
+declare var Skycons: any;
 
 @Component({ //@component is a subtype of injectable
     moduleId: module.id,
@@ -24,11 +25,14 @@ export class WeatherComponent implements OnInit {
     currentLocation = "";
     icons = new Skycons(); //Skycons is javascript library without TS definations
     dataReceived = false;
+    ticks = 0;
 
     constructor(private service: WeatherService) { }
 
     ngOnInit() {
         this.getCurrentLocation();
+        let timer = Observable.timer(2000, 300000); //every two min
+        timer.subscribe(t => this.getCurrentWeather());
     }
 
     getCurrentLocation() {
@@ -67,7 +71,7 @@ export class WeatherComponent implements OnInit {
 
     toggleUnits() {
         this.toggleTempUnits();
-        this.toggleSpeedUnits();        
+        this.toggleSpeedUnits();
     }
 
     toggleTempUnits() {
@@ -88,18 +92,18 @@ export class WeatherComponent implements OnInit {
         }
     }
 
-    setIcon(){
-        this.icons.add("icon", this.weatherData.icon); 
+    setIcon() {
+        this.icons.add("icon", this.weatherData.icon);
         this.icons.play();
     }
 
-    setStyles():Object{
-        if(this.weatherData.icon){ //if this contains data..
+    setStyles(): Object {
+        if (this.weatherData.icon) { //if this contains data..
             this.icons.color = WEATHER_COLORS[this.weatherData.icon]["color"];
             return WEATHER_COLORS[this.weatherData.icon];
         }
-        else{
-            this.icons.color=WEATHER_COLORS["default"]["color"];
+        else {
+            this.icons.color = WEATHER_COLORS["default"]["color"];
             return WEATHER_COLORS["default"];
         }
     }

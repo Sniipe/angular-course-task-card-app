@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var Rx_1 = require('rxjs/Rx');
 var weather_service_1 = require('../service/weather.service');
 var weather_1 = require('../model/weather');
 var constants_1 = require('../constants/constants');
@@ -21,9 +22,13 @@ var WeatherComponent = (function () {
         this.currentLocation = "";
         this.icons = new Skycons(); //Skycons is javascript library without TS definations
         this.dataReceived = false;
+        this.ticks = 0;
     }
     WeatherComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.getCurrentLocation();
+        var timer = Rx_1.Observable.timer(2000, 300000); //every two min
+        timer.subscribe(function (t) { return _this.getCurrentWeather(); });
     };
     WeatherComponent.prototype.getCurrentLocation = function () {
         var _this = this;
